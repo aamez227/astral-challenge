@@ -1,18 +1,6 @@
 {
-  "buildCommand": "npm run build",
-  "devCommand": "npm run dev",
-  "installCommand": "npm install",
   "framework": "nextjs",
   "regions": ["iad1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase-url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase-anon-key",
-    "SUPABASE_SERVICE_ROLE_KEY": "@supabase-service-role-key",
-    "GOOGLE_GENERATIVE_AI_API_KEY": "@google-ai-api-key",
-    "LANGFUSE_SECRET_KEY": "@langfuse-secret-key",
-    "LANGFUSE_PUBLIC_KEY": "@langfuse-public-key",
-    "LANGFUSE_HOST": "@langfuse-host"
-  },
   "functions": {
     "app/api/**": {
       "maxDuration": 300
