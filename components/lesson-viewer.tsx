@@ -27,12 +27,12 @@ export function LessonViewer({ lesson }: LessonViewerProps) {
           <ArrowLeft className="mr-2 h-4 w-4" />
           Back to Lessons
         </Button>
-        <div className="flex-1">
-          <h1 className="text-3xl font-bold">{lesson.title}</h1>
-          <p className="text-muted-foreground mt-1">
-            Created {formatDistanceToNow(new Date(lesson.created_at))} ago
-          </p>
-        </div>
+      </div>
+      <div className="flex-1 max-w-7xl mx-auto mb-6">
+        <h1 className="text-3xl font-bold">{lesson.title}</h1>
+        <p className="text-muted-foreground mt-1">
+          Created {formatDistanceToNow(new Date(lesson.created_at))} ago
+        </p>
       </div>
 
       {/* Lesson Content */}
@@ -41,7 +41,7 @@ export function LessonViewer({ lesson }: LessonViewerProps) {
         <LessonRenderer lesson={lesson} />
         
         {/* Lesson Meta Information */}
-        <Card>
+        <Card className="max-w-7xl mx-auto p-6 bg-white rounded-lg shadow-lg">
           <CardHeader>
             <CardTitle>Lesson Information</CardTitle>
           </CardHeader>

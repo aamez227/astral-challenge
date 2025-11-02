@@ -86,39 +86,6 @@ export function LessonRenderer({ lesson }: LessonRendererProps) {
             </LiveProvider>
           </CardContent>
         </Card>
-
-        {/* Lesson Information */}
-        <Card>
-          <CardHeader>
-            <CardTitle>About This Lesson</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <Button 
-                  className="bg-blue-600 hover:bg-blue-700"
-                  onClick={() => {
-                    if (lesson.generated_code) {
-                      navigator.clipboard.writeText(lesson.generated_code);
-                    }
-                  }}
-                >
-                  📋 Copy Original Code
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => {
-                    if (lesson.generated_code) {
-                      window.open(`data:text/plain;charset=utf-8,${encodeURIComponent(lesson.generated_code)}`, '_blank');
-                    }
-                  }}
-                >
-                  📁 Download Code
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     </div>
   );
