@@ -5,14 +5,16 @@ import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Loader2, Eye, AlertCircle } from "lucide-react";
+import { Loader2, Eye, AlertCircle, Trash2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { Lesson, LessonStatus } from "@/types/lesson";
 import { formatDistanceToNow } from "date-fns";
+import { toast } from "sonner";
 
 export function LessonTable() {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -51,19 +53,15 @@ export function LessonTable() {
           table: "lessons",
         },
         (payload) => {
-          console.log("LessonTable real-time update:", payload);
           if (payload.eventType === "INSERT") {
-            console.log("Adding new lesson:", payload.new);
             setLessons((prev) => [payload.new as Lesson, ...prev]);
           } else if (payload.eventType === "UPDATE") {
-            console.log("Updating lesson:", payload.new);
             setLessons((prev) =>
               prev.map((lesson) =>
                 lesson.id === payload.new.id ? (payload.new as Lesson) : lesson
               )
             );
           } else if (payload.eventType === "DELETE") {
-            console.log("Deleting lesson:", payload.old);
             setLessons((prev) =>
               prev.filter((lesson) => lesson.id !== payload.old.id)
             );
@@ -115,6 +113,34 @@ export function LessonTable() {
   const handleViewLesson = (lesson: Lesson) => {
     if (lesson.status === "completed") {
       router.push(`/lessons/${lesson.id}`);
+    }
+  };
+
+  const handleDeleteLesson = async (lessonId: string) => {
+    if (!confirm("Are you sure you want to delete this lesson? This action cannot be undone.")) {
+      return;
+    }
+
+    setDeletingId(lessonId);
+    
+    try {
+      const response = await fetch(`/api/lessons/${lessonId}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        toast.success("Lesson deleted successfully");
+        fetchLessons();
+      } else {
+        toast.error(result.error || "Failed to delete lesson");
+      }
+    } catch (error) {
+      console.error("Error deleting lesson:", error);
+      toast.error("An error occurred while deleting the lesson");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -179,6 +205,20 @@ export function LessonTable() {
                 >
                   <Eye className="mr-1 h-4 w-4" />
                   View
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => handleDeleteLesson(lesson.id)}
+                  disabled={deletingId === lesson.id}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                >
+                  {deletingId === lesson.id ? (
+                    <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="mr-1 h-4 w-4" />
+                  )}
+                  {deletingId === lesson.id ? "Deleting..." : "Delete"}
                 </Button>
               </div>
             </div>
