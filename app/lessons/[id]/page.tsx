@@ -23,14 +23,11 @@ export default function LessonPage() {
     // Initial fetch
     const fetchLesson = async () => {
       try {
-        console.log("Fetching lesson with ID:", lessonId);
         const { data, error } = await supabase
           .from("lessons")
           .select("*")
           .eq("id", lessonId)
           .single();
-
-        console.log("Lesson API Response:", { data, error });
 
         if (error) {
           console.error("Lesson fetch error:", error);
@@ -38,7 +35,6 @@ export default function LessonPage() {
           return;
         }
 
-        console.log("Lesson data received:", data);
         setLesson(data);
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (err) {
@@ -62,8 +58,6 @@ export default function LessonPage() {
           filter: `id=eq.${lessonId}`,
         },
         (payload) => {
-          console.log("Real-time lesson update received:", payload);
-          console.log("Updated lesson data:", payload.new);
           setLesson(payload.new as Lesson);
         }
       )

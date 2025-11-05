@@ -41,8 +41,6 @@ export function LessonTable() {
   useEffect(() => {
     fetchLessons();
 
-    // Subscribe to real-time updates
-    console.log("Setting up LessonTable real-time subscription");
     const subscription = supabase
       .channel("lessons")
       .on(

@@ -88,22 +88,18 @@ function performSecurityChecks(code: string): { isValid: boolean; errors: string
 function validateComponentStructure(code: string): { isValid: boolean; errors: string[] } {
   const errors: string[] = [];
 
-  // For react-live format, check for function declaration (no exports needed)
   if (!code.includes("function GeneratedLesson")) {
     errors.push("Component must have a 'function GeneratedLesson()' declaration");
   }
 
-  // Check for render call at the end (react-live requirement)
   if (!code.includes("render(<GeneratedLesson")) {
     errors.push("Component must end with 'render(<GeneratedLesson />)' for react-live compatibility");
   }
 
-  // Check for JSX return
   if (!code.includes("return") || !code.includes("<")) {
     errors.push("Component must return JSX");
   }
 
-  // Validate react-live specific patterns
   if (code.includes("export default") || code.includes("export {")) {
     errors.push("React-live components should not have export statements");
   }
@@ -112,7 +108,6 @@ function validateComponentStructure(code: string): { isValid: boolean; errors: s
     errors.push("React-live components should not have import statements");
   }
 
-  // Check for proper function structure
   const functionMatch = code.match(/function GeneratedLesson\(\s*\)\s*\{/);
   if (!functionMatch) {
     errors.push("Function must be declared as 'function GeneratedLesson() {'");

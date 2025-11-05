@@ -10,6 +10,16 @@ interface LessonRendererProps {
   lesson: Lesson;
 }
 
+const scope = {
+  React,
+  useState: React.useState,
+  useEffect: React.useEffect,
+  useRef: React.useRef,
+  useMemo: React.useMemo,
+  useCallback: React.useCallback,
+  Fragment: React.Fragment,
+};
+
 export function LessonRenderer({ lesson }: LessonRendererProps) {
   if (!lesson.generated_code) {
     return (
@@ -57,11 +67,7 @@ export function LessonRenderer({ lesson }: LessonRendererProps) {
           <CardContent>
             <LiveProvider 
               code={lesson.generated_code}
-              scope={{ 
-                useState: React.useState, 
-                useEffect: React.useEffect,
-                React
-              }}
+              scope={scope}
               noInline={true}
             >
               <div className="border rounded-lg overflow-hidden">

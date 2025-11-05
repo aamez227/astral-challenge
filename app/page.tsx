@@ -16,7 +16,6 @@ export default function Home() {
         
         <div className="grid gap-8">
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">Create New Lesson</h2>
             <LessonForm />
           </section>
           

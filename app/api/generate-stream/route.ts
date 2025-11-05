@@ -6,8 +6,6 @@ export async function POST(request: NextRequest) {
   try {
     const { lessonId } = await request.json();
     
-    console.log("Streaming request for lesson:", lessonId);
-    
     if (!lessonId) {
       console.error("No lesson ID provided");
       return new Response("Lesson ID is required", { status: 400 });
@@ -55,13 +53,16 @@ export async function POST(request: NextRequest) {
               stage: chunk.stage
             })}\n\n`);
           }
-
+          
+          // Remove only markdown blocks from raw AI code 
+          const cleanedCode = fullCode.replace(/^```[a-z]*\n|\n```$/g, "").trim();
+          
           // Update the lesson in the database
           const { error: updateError } = await supabase
             .from("lessons")
             .update({
               status: "completed",
-              generated_code: fullCode,
+              generated_code: cleanedCode,
               error_message: null,
             })
             .eq("id", lessonId);
